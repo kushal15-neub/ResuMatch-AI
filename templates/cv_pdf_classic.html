@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CV - {{ cv_data.personal_info.full_name }}</title>
+
+    <style>
+      @page {
+        size: A4;
+        margin: 18mm;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        color: #0f172a;
+        font-size: 11pt;
+      }
+      h1 {
+        font-size: 26pt;
+        margin: 0;
+      }
+      h2 {
+        font-size: 13pt;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin: 18px 0 8px;
+        color: #111827;
+      }
+      .contact {
+        color: #475569;
+        margin-top: 4px;
+        font-size: 10pt;
+      }
+      section {
+        margin-bottom: 12px;
+      }
+      article {
+        margin-bottom: 10px;
+      }
+      article header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: 11pt;
+      }
+      article ul {
+        margin: 4px 0 0 14px;
+        padding: 0;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 10pt;
+      }
+      .pill {
+        display: inline-block;
+        border: 1px solid #cbd5f5;
+        padding: 2px 8px;
+        border-radius: 999px;
+        margin: 3px 6px 0 0;
+        font-size: 9pt;
+      }
+      .profile-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #10b981;
+        margin-bottom: 12px;
+      }
+      .header-with-photo {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 16px;
+      }
+      .header-text {
+        flex: 1;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <div class="header-with-photo">
+      {% if cv_data.profile_photo %}
+      <img src="{{ cv_data.profile_photo }}" alt="Profile Photo" class="profile-photo" />
+      {% endif %}
+
+      <div class="header-text">
+        <h1>{{ cv_data.personal_info.full_name }}</h1>
+
+        <div class="contact">
+          {{ cv_data.personal_info.email }}
+          {% if cv_data.personal_info.phone %} • {{ cv_data.personal_info.phone }}{% endif %}
+          {% if cv_data.personal_info.location %} • {{ cv_data.personal_info.location }}{% endif %}
+        </div>
+      </div>
+    </div>
+
+    {% if cv_data.personal_info.summary %}
+    <section>
+      <h2>Summary</h2>
+      <p>{{ cv_data.personal_info.summary }}</p>
+    </section>
+    {% endif %}
+
+    {% if cv_data.skills %}
+    <section>
+      <h2>Skills</h2>
+      <div>
+        {% for skill in cv_data.skills %}
+        <span class="pill">{{ skill }}</span>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if cv_data.experience %}
+    <section>
+      <h2>Experience</h2>
+      {% for exp in cv_data.experience %}
+      {% if exp.title or exp.company %}
+      <article>
+        <header>
+          <div>
+            {{ exp.title }}{% if exp.company %} • {{ exp.company }}{% endif %}
+          </div>
+          <div class="muted">
+            {% if exp.start %}{{ exp.start }}{% endif %}
+            {% if exp.end %} - {{ exp.end }}{% endif %}
+          </div>
+        </header>
+
+        {% if exp.location %}
+        <div class="muted">{{ exp.location }}</div>
+        {% endif %}
+
+        {% if exp.description %}
+        <ul>
+          {% for bullet in exp.description.splitlines %}
+            {% if bullet %}
+            <li>{{ bullet }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </article>
+      {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if cv_data.education %}
+    <section>
+      <h2>Education</h2>
+      {% for edu in cv_data.education %}
+      {% if edu.degree or edu.institution %}
+      <article>
+        <header>
+          <div>
+            {{ edu.degree }}
+            {% if edu.institution %} • {{ edu.institution }}{% endif %}
+          </div>
+          <div class="muted">
+            {% if edu.start %}{{ edu.start }}{% endif %}
+            {% if edu.end %} - {{ edu.end }}{% endif %}
+          </div>
+        </header>
+
+        {% if edu.location %}
+        <div class="muted">{{ edu.location }}</div>
+        {% endif %}
+
+        {% if edu.details %}
+        <p>{{ edu.details }}</p>
+        {% endif %}
+      </article>
+      {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+    {% if cv_data.projects %}
+    <section>
+      <h2>Projects</h2>
+      {% for proj in cv_data.projects %}
+      {% if proj.name %}
+      <article>
+        <header>
+          <div>{{ proj.name }}</div>
+          {% if proj.link %}
+          <div class="muted">{{ proj.link }}</div>
+          {% endif %}
+        </header>
+
+        {% if proj.description %}
+        <p>{{ proj.description }}</p>
+        {% endif %}
+      </article>
+      {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+
+  </body>
+</html>

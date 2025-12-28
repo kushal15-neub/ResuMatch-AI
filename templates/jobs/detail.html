@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ job.title }} - Job Details</title>
+
+    <link rel="stylesheet" href="/static/css/cv-styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <div
+      class="page"
+      style="max-width: 900px; margin: 32px auto; padding: 0 16px"
+    >
+      <a href="{% url 'job_recommendations' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to recommendations
+      </a>
+
+      <div class="card" style="margin-top: 16px; padding: 20px">
+        <h1>{{ job.title }}</h1>
+
+        <p style="color: #6b7280">
+          <strong>{{ job.company }}</strong>
+          {% if job.location %}
+            • {{ job.location }}
+          {% endif %}
+          {% if job.experience_level %}
+            • {{ job.experience_level }}
+          {% endif %}
+        </p>
+
+        {% if job.required_skills %}
+          <h3>Required skills</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            {% for s in job.required_skills %}
+              <span class="skill-tag">{{ s }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <h3 style="margin-top: 16px">Description</h3>
+        <p style="white-space: pre-line">{{ job.description }}</p>
+
+        <div id="apply" style="margin-top: 24px; padding-top: 24px; border-top: 2px solid #e5e7eb;">
+          <h3>Apply for this Position</h3>
+          
+          {% if existing_application %}
+            <div style="background: #eff6ff; border: 1px solid #3b82f6; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+              <p style="margin: 0; color: #1e40af;">
+                <i class="fas fa-check-circle"></i> 
+                <strong>You have already applied for this position.</strong><br>
+                Status: <span style="text-transform: capitalize;">{{ existing_application.get_status_display }}</span><br>
+                Applied on: {{ existing_application.applied_at|date:"M d, Y" }}
+              </p>
+            </div>
+          {% endif %}
+
+          {% if user_cvs %}
+            <form method="POST" style="margin-top: 20px;">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="apply">
+              
+              <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                  Select CV to Apply With:
+                </label>
+                <select name="cv_id" required style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #d1d5db;">
+                  <option value="">-- Select a CV --</option>
+                  {% for cv in user_cvs %}
+                    <option value="{{ cv.id }}" {% if existing_application and existing_application.cv.id == cv.id %}selected{% endif %}>
+                      {{ cv.name }} (Version {{ cv.version }}) - Updated {{ cv.updated_at|date:"M d, Y" }}
+                    </option>
+                  {% endfor %}
+                </select>
+                <small style="color: #6b7280; display: block; margin-top: 4px;">
+                  Don't have a CV? <a href="{% url 'cv_templates' %}">Create one now</a>
+                </small>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">
+                  Cover Letter (Optional):
+                </label>
+                <textarea 
+                  name="cover_letter" 
+                  rows="6" 
+                  placeholder="Write a brief cover letter explaining why you're a good fit for this position..."
+                  style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #d1d5db; font-family: inherit;"
+                >{% if existing_application %}{{ existing_application.cover_letter }}{% endif %}</textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
+                <i class="fas fa-paper-plane"></i> 
+                {% if existing_application %}Update Application{% else %}Submit Application{% endif %}
+              </button>
+            </form>
+          {% else %}
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 16px;">
+              <p style="margin: 0; color: #92400e;">
+                <i class="fas fa-exclamation-triangle"></i> 
+                <strong>You need to create a CV first!</strong><br>
+                <a href="{% url 'cv_templates' %}" class="btn btn-primary" style="margin-top: 12px; display: inline-block;">
+                  Create Your CV
+                </a>
+              </p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

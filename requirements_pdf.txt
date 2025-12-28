@@ -1,0 +1,2 @@
+# Add these to your requirements.txt for PDF generation
+weasyprint==60.2

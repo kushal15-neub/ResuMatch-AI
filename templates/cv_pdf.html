@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CV - {{ cv_data.personal_info.full_name }}</title>
+    <style>
+        @page { size: A4; margin: 20mm; }
+        body { font-family: Arial, sans-serif; color: #111; }
+        h1 { margin: 0 0 6px; font-size: 24px; }
+        h2 { font-size: 16px; margin: 16px 0 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+        p { margin: 4px 0; }
+        .muted { color: #555; font-size: 12px; }
+        .section { margin-top: 12px; }
+        .item { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <h1>{{ cv_data.personal_info.full_name }}</h1>
+    <p class="muted">
+        {{ cv_data.personal_info.email }}{% if cv_data.personal_info.phone %} | {{ cv_data.personal_info.phone }}{% endif %}
+        {% if cv_data.personal_info.location %} | {{ cv_data.personal_info.location }}{% endif %}
+    </p>
+    {% if cv_data.personal_info.summary %}
+        <div class="section">
+            <h2>Summary</h2>
+            <p>{{ cv_data.personal_info.summary }}</p>
+        </div>
+    {% endif %}
+
+    {% if cv_data.experience %}
+        <div class="section">
+            <h2>Experience</h2>
+            {% for exp in cv_data.experience %}
+                <div class="item">
+                    <strong>{{ exp.title }}</strong>
+                    {% if exp.company %} - {{ exp.company }}{% endif %}
+                    {% if exp.duration %} | {{ exp.duration }}{% endif %}
+                    {% if exp.description %}<div>{{ exp.description }}</div>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if cv_data.education %}
+        <div class="section">
+            <h2>Education</h2>
+            {% for edu in cv_data.education %}
+                <div class="item">
+                    <strong>{{ edu.degree }}</strong>
+                    {% if edu.institution %} - {{ edu.institution }}{% endif %}
+                    {% if edu.year %} | {{ edu.year }}{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if cv_data.skills %}
+        <div class="section">
+            <h2>Skills</h2>
+            <p>{{ cv_data.skills|join:", " }}</p>
+        </div>
+    {% endif %}
+
+    {% if cv_data.projects %}
+        <div class="section">
+            <h2>Projects</h2>
+            {% for proj in cv_data.projects %}
+                <div class="item">
+                    <strong>{{ proj.name }}</strong>
+                    {% if proj.link %} - {{ proj.link }}{% endif %}
+                    {% if proj.description %}<div>{{ proj.description }}</div>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</body>
+</html>

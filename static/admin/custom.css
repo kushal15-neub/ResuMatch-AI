@@ -1,0 +1,331 @@
+:root {
+  --rm-primary: #6366f1;
+  --rm-secondary: #8b5cf6;
+  --rm-accent: #06b6d4;
+  --rm-success: #10b981;
+  --rm-warning: #f59e0b;
+  --rm-danger: #ef4444;
+  --rm-light: #f8fafc;
+  --rm-dark: #0f172a;
+  --rm-gray: #64748b;
+  --rm-border: #e2e8f0;
+}
+
+/* Enhanced Branding */
+.rm-admin-branding {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.rm-admin-logo {
+  font-weight: 800;
+  font-size: 18px;
+  background: linear-gradient(135deg, var(--rm-primary), var(--rm-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.rm-admin-badge {
+  font-weight: 800;
+  color: var(--rm-accent);
+}
+.rm-admin-sub {
+  opacity: 0.7;
+  margin-left: 0.25rem;
+}
+
+/* Header Enhancement */
+.theme-toggle,
+.breadcrumbs {
+  display: none;
+}
+#header {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border-bottom: 2px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+#user-tools a {
+  color: #e2e8f0;
+  transition: color 0.3s ease;
+}
+#user-tools a:hover {
+  color: var(--rm-accent);
+}
+
+/* Enhanced Buttons */
+.button,
+.submit-row input[type="submit"],
+.default,
+input[type="submit"] {
+  background: linear-gradient(135deg, var(--rm-primary), var(--rm-secondary));
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+}
+.button:hover,
+.submit-row input[type="submit"]:hover,
+.default:hover,
+input[type="submit"]:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}
+
+/* Action Buttons */
+.deletelink {
+  background: var(--rm-danger) !important;
+  color: white !important;
+}
+.deletelink:hover {
+  background: #dc2626 !important;
+}
+
+/* Enhanced Tables */
+#changelist {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+#changelist table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+#changelist thead th {
+  background: linear-gradient(135deg, var(--rm-light), #f1f5f9);
+  border-bottom: 2px solid var(--rm-border);
+  font-weight: 600;
+  color: var(--rm-dark);
+  padding: 15px 12px;
+}
+#changelist tbody tr {
+  transition: background-color 0.2s ease;
+}
+#changelist tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.05);
+}
+#changelist tbody td {
+  padding: 12px;
+  border-bottom: 1px solid var(--rm-border);
+}
+
+/* Form Enhancements */
+.form-row {
+  margin-bottom: 20px;
+}
+.form-row label {
+  font-weight: 600;
+  color: var(--rm-dark);
+  margin-bottom: 5px;
+  display: block;
+}
+.form-row input,
+.form-row textarea,
+.form-row select {
+  border: 2px solid var(--rm-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+}
+.form-row input:focus,
+.form-row textarea:focus,
+.form-row select:focus {
+  border-color: var(--rm-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Fieldset Styling */
+fieldset {
+  border: 2px solid var(--rm-border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: var(--rm-light);
+}
+fieldset h2 {
+  color: var(--rm-primary);
+  font-weight: 700;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--rm-border);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.status-active {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--rm-success);
+}
+.status-inactive {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--rm-danger);
+}
+.status-pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--rm-warning);
+}
+
+/* Pagination */
+.paginator {
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.paginator a {
+  color: var(--rm-primary);
+  text-decoration: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+.paginator a:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+/* Filters */
+#changelist-filter {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+}
+#changelist-filter h2 {
+  color: var(--rm-primary);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+#changelist-filter h3 {
+  color: var(--rm-dark);
+  font-weight: 600;
+  margin: 15px 0 8px 0;
+}
+#changelist-filter a {
+  color: var(--rm-gray);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+#changelist-filter a:hover,
+#changelist-filter a.selected {
+  background: var(--rm-primary);
+  color: white;
+}
+
+/* Messages */
+.messagelist {
+  margin: 20px 0;
+}
+.messagelist li {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.messagelist .success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--rm-success);
+  border-left: 4px solid var(--rm-success);
+}
+.messagelist .error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--rm-danger);
+  border-left: 4px solid var(--rm-danger);
+}
+.messagelist .warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--rm-warning);
+  border-left: 4px solid var(--rm-warning);
+}
+
+/* Login Page Enhancement */
+body.login {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+body.login #container {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  background: white;
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
+}
+body.login #header {
+  display: none;
+}
+body.login h1 {
+  text-align: center;
+  color: var(--rm-primary);
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #changelist {
+    margin: 10px;
+    border-radius: 8px;
+  }
+  #changelist table {
+    font-size: 14px;
+  }
+  #changelist thead th,
+  #changelist tbody td {
+    padding: 8px 6px;
+  }
+  .form-row input,
+  .form-row textarea,
+  .form-row select {
+    max-width: 100%;
+  }
+}
+
+/* Loading Animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(99, 102, 241, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--rm-primary);
+  animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--rm-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rm-primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rm-secondary);
+}

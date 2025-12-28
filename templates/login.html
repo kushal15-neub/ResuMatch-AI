@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="auth-status"
+      content="{% if user.is_authenticated %}authenticated{% else %}anonymous{% endif %}"
+    />
+    <title>Login - ResuMatch AI</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'auth-styles.css' %}" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <!-- Login Form -->
+      <div class="auth-form-container">
+        <div class="auth-form-wrapper">
+          <!-- Django Messages -->
+          {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+            <div
+              class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+              role="alert"
+            >
+              {{ message }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+              ></button>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <!-- Logo and Back Link -->
+          <div class="auth-header">
+            <a href="{% url 'home' %}" class="back-link">
+              <i class="fas fa-arrow-left"></i>
+              <span>Back to Home</span>
+            </a>
+            <div class="logo-section">
+              <div class="logo-icon">
+                <i class="fas fa-robot"></i>
+              </div>
+              <h1>ResuMatch AI</h1>
+              <p>Welcome back! Please login to your account.</p>
+            </div>
+          </div>
+
+          <!-- Login Form -->
+          <form
+            class="auth-form"
+            id="loginForm"
+            method="post"
+            action="{% url 'login' %}"
+          >
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="email">
+                <i class="fas fa-envelope"></i>
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="password">
+                <i class="fas fa-lock"></i>
+                Password
+              </label>
+              <div class="password-input-group">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  id="passwordToggle"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  name="remember"
+                  class="form-check-input"
+                />
+                <label for="remember" class="form-check-label"
+                  >Remember me</label
+                >
+              </div>
+              <a href="{% url 'forgot_password' %}" class="forgot-link"
+                >Forgot Password?</a
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-btn">
+              <span class="btn-text">Login</span>
+              <span class="btn-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Logging in...
+              </span>
+            </button>
+          </form>
+
+          <!-- Social Login -->
+          <div class="social-login">
+            <div class="divider"><span>or continue with</span></div>
+            <div class="social-buttons">
+              <a
+                href="{% url 'social:begin' 'google-oauth2' %}"
+                class="btn btn-outline-secondary social-btn"
+              >
+                <i class="fab fa-google"></i>
+                <span>Continue with Google</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Sign Up Link -->
+          <div class="auth-footer">
+            <p>
+              Don't have an account?
+              <a href="{% url 'register' %}">Sign up here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side Content -->
+      <div class="auth-content">
+        <div class="ai-core-graphic"></div>
+        <div class="floating-cards">
+          <div class="floating-card card-1">
+            <i class="fas fa-file-alt"></i>
+            <span>Resume</span>
+          </div>
+          <div class="floating-card card-2">
+            <i class="fas fa-briefcase"></i>
+            <span>Jobs</span>
+          </div>
+          <div class="floating-card card-3">
+            <i class="fas fa-chart-pie"></i>
+            <span>Analytics</span>
+          </div>
+        </div>
+        <div class="content-wrapper">
+          <div class="content-text">
+            <h2>Join the Future of Resume Building</h2>
+            <p>
+              Start your journey with ResuMatch AI and discover how artificial
+              intelligence can transform your career prospects.
+            </p>
+          </div>
+          <div class="content-features">
+            <div class="feature-item">
+              <div class="feature-icon">
+                <i class="fas fa-magic"></i>
+              </div>
+              <div class="feature-text">
+                <h4>AI-Powered Suggestions</h4>
+                <p>Get intelligent recommendations for your resume content</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <i class="fas fa-palette"></i>
+              </div>
+              <div class="feature-text">
+                <h4>Professional Templates</h4>
+                <p>Choose from industry-specific resume templates</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">
+                <i class="fas fa-chart-bar"></i>
+              </div>
+              <div class="feature-text">
+                <h4>Performance Tracking</h4>
+                <p>Monitor your application success rates</p>
+              </div>
+            </div>
+          </div>
+          <div class="content-stats">
+            <div class="stat-item">
+              <h3>10K+</h3>
+              <p>Active Users</p>
+            </div>
+            <div class="stat-item">
+              <h3>95%</h3>
+              <p>Success Rate</p>
+            </div>
+            <div class="stat-item">
+              <h3>24/7</h3>
+              <p>AI Support</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'auth-script.js' %}"></script>
+    <script src="{% static 'navigation-fix.js' %}"></script>
+  </body>
+</html>

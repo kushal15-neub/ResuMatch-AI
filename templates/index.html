@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="auth-status"
+      content="{% if user.is_authenticated %}authenticated{% else %}anonymous{% endif %}"
+    />
+    <title>ResuMatch AI - Intelligent Resume Builder</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          <i class="fas fa-robot me-2"></i>ResuMatch AI
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <span class="nav-link text-light"
+                >Welcome, {{ user.first_name }}!</span
+              >
+            </li>
+            <li class="nav-item ms-2">
+              <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}"
+                >Logout</a
+              >
+            </li>
+            {% else %}
+            <li class="nav-item ms-2">
+              <a class="btn btn-outline-light btn-sm" href="{% url 'login' %}"
+                >Login</a
+              >
+            </li>
+            <li class="nav-item ms-2">
+              <a class="btn btn-primary btn-sm" href="{% url 'register' %}"
+                >Get Started</a
+              >
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="row align-items-center min-vh-100">
+          <div class="col-lg-6">
+            <div class="hero-content">
+              <h1 class="hero-title">
+                <span class="text-gradient">ResuMatch</span>
+                <span class="ai-text">AI</span>
+              </h1>
+              <p class="hero-subtitle">
+                Transform your career with AI-powered resume building and
+                intelligent job matching
+              </p>
+              <div class="hero-features">
+                <div class="feature-item">
+                  <i class="fas fa-magic"></i>
+                  <span>AI-Powered Resume Builder</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-search"></i>
+                  <span>Smart Job Matching</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-chart-line"></i>
+                  <span>Career Analytics</span>
+                </div>
+              </div>
+              <div class="hero-buttons">
+                {% if user.is_authenticated %}
+                <a
+                  href="{% url 'cv_templates' %}"
+                  class="btn btn-primary btn-lg me-3"
+                >
+                  <i class="fas fa-rocket me-2"></i>Start Building
+                </a>
+                {% else %}
+                <a
+                  href="{% url 'register' %}"
+                  class="btn btn-primary btn-lg me-3"
+                >
+                  <i class="fas fa-rocket me-2"></i>Get Started
+                </a>
+                {% endif %}
+                <a
+                  href="https://www.youtube.com/watch?v=XJ7bYdjKDcA"
+                  class="btn btn-outline-light btn-lg"
+                >
+                  <i class="fas fa-play me-2"></i>Watch Demo
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="hero-visual">
+              <div class="floating-card card-1">
+                <i class="fas fa-file-alt"></i>
+                <span>Resume</span>
+              </div>
+              <div class="floating-card card-2">
+                <i class="fas fa-briefcase"></i>
+                <span>Jobs</span>
+              </div>
+              <div class="floating-card card-3">
+                <i class="fas fa-chart-pie"></i>
+                <span>Analytics</span>
+              </div>
+              <div class="main-illustration">
+                <div class="ai-brain">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <div class="connection-lines"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+      <div class="container">
+        <div class="row text-center mb-5">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="section-title">Why Choose ResuMatch AI?</h2>
+            <p class="section-subtitle">
+              Experience the future of resume building with cutting-edge AI
+              technology
+            </p>
+          </div>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-robot"></i>
+              </div>
+              <h4>AI-Powered Builder</h4>
+              <p>
+                Create professional resumes with intelligent suggestions and
+                content optimization
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-search"></i>
+              </div>
+              <h4>Smart Matching</h4>
+              <p>
+                Find the perfect job opportunities that match your skills and
+                experience
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="feature-card">
+              <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h4>Career Analytics</h4>
+              <p>
+                Track your application success and optimize your job search
+                strategy
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h2 class="section-title">About ResuMatch AI</h2>
+            <p class="lead">
+              We're revolutionizing the way people build resumes and find jobs.
+              Our AI-powered platform combines cutting-edge technology with
+              human expertise to deliver results that matter.
+            </p>
+            <div class="stats">
+              <div class="stat-item">
+                <h3>10K+</h3>
+                <p>Resumes Created</p>
+              </div>
+              <div class="stat-item">
+                <h3>5K+</h3>
+                <p>Jobs Matched</p>
+              </div>
+              <div class="stat-item">
+                <h3>95%</h3>
+                <p>Success Rate</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="about-visual">
+              <div class="tech-stack">
+                <div class="tech-item">AI/ML</div>
+                <div class="tech-item">NLP</div>
+                <div class="tech-item">Cloud</div>
+                <div class="tech-item">Analytics</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+      <div class="container">
+        <div class="row text-center mb-5">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="section-title">Get In Touch</h2>
+            <p class="section-subtitle">
+              Have questions? We'd love to hear from you.
+            </p>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-6">
+            <div class="contact-form">
+              <form>
+                <div class="mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Your Name"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    placeholder="Your Email"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <textarea
+                    class="form-control"
+                    rows="4"
+                    placeholder="Your Message"
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  Send Message
+                </button>
+              </form>
+            </div>
+
+            <!-- Support Contact Info -->
+            <div class="support-contact mt-4">
+              <h5 class="text-center mb-3">Need Immediate Help?</h5>
+              <div class="support-options">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary w-100 mb-2"
+                  onclick="callSupport()"
+                >
+                  <i class="fas fa-phone me-2"></i>
+                  Call Support: +880 1721-254024
+                </button>
+                <div class="text-center">
+                  <small class="text-muted"
+                    >Available 24/7 for urgent assistance</small
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-4">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p class="mb-0">&copy; 2024 ResuMatch AI. All rights reserved.</p>
+          </div>
+          <div class="col-md-6 text-md-end">
+            <div class="social-links">
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"
+                ><i class="fab fa-linkedin"></i
+              ></a>
+              <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/script.js"></script>
+    <script src="/static/navigation-fix.js"></script>
+
+    <script>
+      function callSupport() {
+        const phoneNumber = "+8801721254024";
+
+        // Check if running on mobile device
+        if (
+          /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+        ) {
+          // For mobile devices, use tel: protocol to initiate call
+          try {
+            window.location.href = `tel:${phoneNumber}`;
+            alert("Initiating call to support...");
+          } catch (error) {
+            alert(
+              "Unable to initiate call. Please dial manually: " + phoneNumber
+            );
+          }
+        } else {
+          // For desktop devices, copy to clipboard and show message
+          if (navigator.clipboard) {
+            navigator.clipboard
+              .writeText(phoneNumber)
+              .then(() => {
+                alert(`Phone number ${phoneNumber} copied to clipboard!`);
+              })
+              .catch(() => {
+                alert(`Please call our support: ${phoneNumber}`);
+              });
+          } else {
+            alert(`Please call our support: ${phoneNumber}`);
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

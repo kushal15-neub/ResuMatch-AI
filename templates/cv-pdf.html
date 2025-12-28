@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - {{ cv_data.personal_info.full_name }}</title>
+    <style>
+        /* PDF-optimized styles */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.4;
+            color: #111218;
+            margin: 0;
+            padding: 0;
+            font-size: 11pt;
+        }
+        
+        .cv-header {
+            text-align: center;
+            margin-bottom: 25pt;
+            padding-bottom: 15pt;
+            border-bottom: 2pt solid #7c9cff;
+        }
+        
+        .cv-header h1 {
+            font-family: 'Merriweather', Georgia, serif;
+            font-size: 24pt;
+            font-weight: 700;
+            color: #111218;
+            margin: 0 0 8pt 0;
+            letter-spacing: 0.5pt;
+        }
+        
+        .contact-info {
+            color: #5b6275;
+            font-size: 10pt;
+            margin: 8pt 0;
+        }
+        
+        .cv-section {
+            margin-bottom: 20pt;
+        }
+        
+        .cv-section h2 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #2a2e3a;
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
+            border-bottom: 1pt solid #e9ebf0;
+            padding-bottom: 4pt;
+            margin-bottom: 12pt;
+        }
+        
+        .cv-item {
+            margin-bottom: 12pt;
+        }
+        
+        .cv-item h3 {
+            font-size: 11pt;
+            font-weight: 600;
+            color: #111218;
+            margin: 0 0 3pt 0;
+        }
+        
+        .cv-item .meta {
+            color: #525a6d;
+            font-size: 9pt;
+            margin-bottom: 6pt;
+        }
+        
+        .cv-item p {
+            color: #404657;
+            line-height: 1.4;
+            margin: 0;
+            font-size: 10pt;
+        }
+        
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6pt;
+        }
+        
+        .skill-tag {
+            background: #eef2ff;
+            color: #1e2358;
+            padding: 3pt 8pt;
+            border-radius: 12pt;
+            font-size: 8pt;
+            font-weight: 500;
+            border: 1pt solid #d7defe;
+        }
+        
+        /* Ensure proper page breaks */
+        .cv-section {
+            page-break-inside: avoid;
+        }
+        
+        .cv-item {
+            page-break-inside: avoid;
+        }
+        
+        /* Print-specific styles */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+        <div class="cv-header">
+        <h1>{{ cv_data.personal_info.full_name }}</h1>
+            <div class="contact-info">
+            <span>{{ cv_data.personal_info.email }}</span>
+            {% if cv_data.personal_info.phone %}
+                <span> • {{ cv_data.personal_info.phone }}</span>
+            {% endif %}
+            {% if cv_data.personal_info.location %}
+                <span> • {{ cv_data.personal_info.location }}</span>
+            {% endif %}
+                </div>
+            </div>
+            
+    {% if cv_data.personal_info.summary %}
+            <div class="cv-section">
+        <h2>Professional Summary</h2>
+        <p>{{ cv_data.personal_info.summary }}</p>
+                    </div>
+    {% endif %}
+    
+    {% if cv_data.experience %}
+    <div class="cv-section">
+        <h2>Work Experience</h2>
+        {% for exp in cv_data.experience %}
+        <div class="cv-item">
+            <h3>{{ exp.title }}</h3>
+            <div class="meta">
+                <strong>{{ exp.company }}</strong>
+                {% if exp.location %} • {{ exp.location }}{% endif %}
+                {% if exp.start and exp.end %} • {{ exp.start }} - {{ exp.end }}{% endif %}
+            </div>
+            {% if exp.description %}
+            <p>{{ exp.description|linebreaks }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if cv_data.education %}
+            <div class="cv-section">
+        <h2>Education</h2>
+        {% for edu in cv_data.education %}
+        <div class="cv-item">
+            <h3>{{ edu.degree }}</h3>
+            <div class="meta">
+                <strong>{{ edu.institution }}</strong>
+                {% if edu.location %} • {{ edu.location }}{% endif %}
+                {% if edu.start and edu.end %} • {{ edu.start }} - {{ edu.end }}{% endif %}
+            </div>
+            {% if edu.details %}
+            <p>{{ edu.details }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if cv_data.skills %}
+    <div class="cv-section">
+        <h2>Skills</h2>
+        <div class="skills-tags">
+            {% for skill in cv_data.skills %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if cv_data.projects %}
+    <div class="cv-section">
+        <h2>Projects</h2>
+        {% for project in cv_data.projects %}
+        <div class="cv-item">
+            <h3>
+                {% if project.link %}
+                    {{ project.name }}
+                {% else %}
+                    {{ project.name }}
+                {% endif %}
+            </h3>
+            {% if project.description %}
+            <p>{{ project.description|linebreaks }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</body>
+</html>

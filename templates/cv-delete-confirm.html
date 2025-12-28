@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delete CV - ResuMatch AI</title>
+    <link rel="stylesheet" href="/static/css/cv-styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="cv-container">
+      <div class="cv-main" style="max-width: 600px; margin: 40px auto">
+        <div class="card" style="padding: 32px">
+          <h2 style="color: #ef4444; margin-bottom: 16px">
+            <i class="fas fa-exclamation-triangle"></i> Delete CV
+          </h2>
+
+          <p>
+            Are you sure you want to delete
+            <strong>{{ cv.name }}</strong> (Version {{ cv.version }})?
+          </p>
+          <p style="color: #6b7280; font-size: 14px">
+            This action cannot be undone.
+          </p>
+
+          <form method="POST" style="margin-top: 24px">
+            {% csrf_token %}
+            <div style="display: flex; gap: 12px">
+              <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Yes, Delete
+              </button>
+              <a href="{% url 'cv_dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

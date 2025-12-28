@@ -1,0 +1,101 @@
+<div class="cv-template template-classic">
+  <div class="classic-header">
+    <div>
+      <h1>{{ cv_data.personal_info.full_name }}</h1>
+      <div class="classic-contact">
+        <span>{{ cv_data.personal_info.email }}</span>
+        {% if cv_data.personal_info.phone %}
+        <span>• {{ cv_data.personal_info.phone }}</span>
+        {% endif %} {% if cv_data.personal_info.location %}
+        <span>• {{ cv_data.personal_info.location }}</span>
+        {% endif %}
+      </div>
+    </div>
+    {% if cv_data.personal_info.summary %}
+    <p class="classic-summary">{{ cv_data.personal_info.summary }}</p>
+    {% endif %}
+  </div>
+
+  {% if cv_data.skills %}
+  <section class="classic-section">
+    <h2>Skills</h2>
+    <div class="classic-pill-group">
+      {% for skill in cv_data.skills %}
+      <span>{{ skill }}</span>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %} {% if cv_data.experience %}
+  <section class="classic-section">
+    <h2>Work Experience</h2>
+    {% for exp in cv_data.experience %} {% if exp.title or exp.company or
+    exp.description %}
+    <article>
+      <header>
+        <div>
+          <strong>{{ exp.title }}</strong>
+          {% if exp.company %} • <span>{{ exp.company }}</span>{% endif %}
+        </div>
+        {% if exp.start or exp.end %}
+        <span class="muted"
+          >{{ exp.start|default:"Present" }}{% if exp.end %} — {{ exp.end }}{%
+          endif %}</span
+        >
+        {% endif %}
+      </header>
+      {% if exp.location %}
+      <div class="muted">{{ exp.location }}</div>
+      {% endif %} {% if exp.description %}
+      <ul>
+        {% for bullet in exp.description.splitlines %} {% if bullet %}
+        <li>{{ bullet }}</li>
+        {% endif %} {% endfor %}
+      </ul>
+      {% endif %}
+    </article>
+    {% endif %} {% endfor %}
+  </section>
+  {% endif %} {% if cv_data.education %}
+  <section class="classic-section">
+    <h2>Education</h2>
+    {% for edu in cv_data.education %} {% if edu.degree or edu.institution %}
+    <article>
+      <header>
+        <strong>{{ edu.degree }}</strong>
+        {% if edu.institution %}<span> • {{ edu.institution }}</span>{% endif %}
+      </header>
+      <div class="muted">
+        {% if edu.location %}{{ edu.location }}{% endif %} {% if edu.start or
+        edu.end %} {% if edu.location %} • {% endif %} {{ edu.start|default:""
+        }}{% if edu.end %} – {{ edu.end }}{% endif %} {% endif %}
+      </div>
+      {% if edu.details %}
+      <p>{{ edu.details }}</p>
+      {% endif %}
+    </article>
+    {% endif %} {% endfor %}
+  </section>
+  {% endif %} {% if cv_data.projects %}
+  <section class="classic-section">
+    <h2>Projects</h2>
+    {% for project in cv_data.projects %} {% if project.name %}
+    <article>
+      <header>
+        <strong>{{ project.name }}</strong>
+        {% if project.link %}
+        <span>
+          •
+          <a href="{{ project.link }}" target="_blank"
+            >{{ project.link }}</a
+          ></span
+        >
+        {% endif %}
+      </header>
+      {% if project.description %}
+      <p>{{ project.description }}</p>
+      {% endif %}
+    </article>
+    {% endif %} {% endfor %}
+  </section>
+  {% endif %}
+</div>

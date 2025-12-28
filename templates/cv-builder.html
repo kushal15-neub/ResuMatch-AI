@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Builder - ResuMatch AI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/static/css/cv-styles.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+
+    <script src="/static/navigation-fix.js"></script>
+  </head>
+
+  <body>
+    <div class="cv-container">
+      <!-- HEADER -->
+      <div class="cv-header">
+        <div class="cv-header-content">
+          <a href="{% url 'cv_templates' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Templates</span>
+          </a>
+
+          <div class="logo-section">
+            <div class="logo-icon">
+              <i class="fas fa-edit"></i>
+            </div>
+            <div>
+              <h1>Build Your CV - {{ template.name }}</h1>
+              <p>Fill in your information to create a professional CV</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DJANGO MESSAGES -->
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+
+      <!-- MAIN FORM -->
+      <div class="cv-main">
+        <form method="POST" enctype="multipart/form-data" class="cv-builder-form">
+          {% csrf_token %}
+
+          <!-- PERSONAL INFORMATION -->
+          <div class="section">
+            <h3><i class="fas fa-user"></i> Personal Information</h3>
+
+            <div class="form-grid two">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="full_name"
+                  placeholder="e.g., John Doe"
+                  value="{% if cv_data.personal_info.full_name %}{{ cv_data.personal_info.full_name }}{% else %}{{ user_data.full_name|default:'' }}{% endif %}"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="john@example.com"
+                  value="{% if cv_data.personal_info.email %}{{ cv_data.personal_info.email }}{% else %}{{ user_data.email|default:'' }}{% endif %}"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-grid two">
+              <div class="form-group">
+                <label>Phone</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="+1 (555) 123-4567"
+                  value="{% if cv_data.personal_info.phone %}{{ cv_data.personal_info.phone }}{% else %}{{ user_data.phone|default:'' }}{% endif %}"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="City, Country"
+                  value="{{ cv_data.personal_info.location|default:'' }}"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Professional Summary</label>
+              <textarea name="summary" placeholder="Brief summary..." rows="4">
+{{ cv_data.personal_info.summary|default:'' }}</textarea>
+            </div>
+          </div>
+
+          <!-- TEMPLATE CHOICE -->
+          <div class="section">
+            <h3><i class="fas fa-palette"></i> Design & Photo</h3>
+
+            <div class="template-options">
+              <label class="template-card">
+                <input
+                  type="radio"
+                  name="template_choice"
+                  value="classic"
+                  {% if cv_data.template_choice != "modern" %}checked{% endif %}
+                />
+                <div>
+                  <strong>Classic</strong>
+                  <p>Clean black & green typography</p>
+                </div>
+              </label>
+
+              <label class="template-card">
+                <input
+                  type="radio"
+                  name="template_choice"
+                  value="modern"
+                  {% if cv_data.template_choice == "modern" %}checked{% endif %}
+                />
+                <div>
+                  <strong>Modern</strong>
+                  <p>Two-column layout with sidebar</p>
+                </div>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label>Profile Photo (optional)</label>
+              <input type="file" name="profile_photo" accept="image/*" />
+              {% if cv_data.profile_photo %}
+              <small class="text-muted">
+                Photo already uploaded. Upload a new one to replace.
+              </small>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- WORK EXPERIENCE -->
+          <div class="section">
+            <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+
+            <div id="experience-fields">
+              {% for exp in cv_data.experience %}
+              <div class="experience-item">
+                <div class="item-header">
+                  <span class="item-title">Experience #{{ forloop.counter }}</span>
+                  {% if not forloop.first %}
+                  <button type="button" onclick="removeExperience(this)" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                  {% endif %}
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Job Title</label>
+                    <input
+                      type="text"
+                      name="experience_title"
+                      placeholder="e.g., Software Engineer"
+                      value="{{ exp.title|default:'' }}"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Company</label>
+                    <input
+                      type="text"
+                      name="experience_company"
+                      placeholder="Company Name"
+                      value="{{ exp.company|default:'' }}"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid three">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input
+                      type="text"
+                      name="experience_location"
+                      placeholder="City, Country"
+                      value="{{ exp.location|default:'' }}"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="experience_start" value="{{ exp.start|default:'' }}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="experience_end" value="{{ exp.end|default:'' }}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Description (one per line)</label>
+                  <textarea name="experience_description" rows="4">
+{{ exp.description|default:'' }}</textarea>
+                </div>
+              </div>
+
+              {% empty %}
+
+              <!-- EMPTY DEFAULT EXPERIENCE -->
+              <div class="experience-item">
+                <div class="item-header">
+                  <span class="item-title">Experience #1</span>
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Job Title</label>
+                    <input type="text" name="experience_title" placeholder="e.g., Software Engineer" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Company</label>
+                    <input type="text" name="experience_company" placeholder="Company Name" />
+                  </div>
+                </div>
+
+                <div class="form-grid three">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="experience_location" placeholder="City, Country" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="experience_start" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="experience_end" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Description (one per line)</label>
+                  <textarea name="experience_description" rows="4"></textarea>
+                </div>
+              </div>
+
+              {% endfor %}
+            </div>
+
+            <button type="button" onclick="addExperience()" class="btn btn-secondary">
+              <i class="fas fa-plus"></i> Add Experience
+            </button>
+          </div>
+
+          <!-- EDUCATION -->
+          <div class="section">
+            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+
+            <div id="education-fields">
+              {% for edu in cv_data.education %}
+              <div class="education-item">
+                <div class="item-header">
+                  <span class="item-title">Education #{{ forloop.counter }}</span>
+                  {% if not forloop.first %}
+                  <button type="button" onclick="removeEducation(this)" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                  {% endif %}
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Degree</label>
+                    <input
+                      type="text"
+                      name="education_degree"
+                      placeholder="Bachelor of Science"
+                      value="{{ edu.degree|default:'' }}"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Institution</label>
+                    <input
+                      type="text"
+                      name="education_institution"
+                      placeholder="University Name"
+                      value="{{ edu.institution|default:'' }}"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-grid three">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input
+                      type="text"
+                      name="education_location"
+                      placeholder="City, Country"
+                      value="{{ edu.location|default:'' }}"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="education_start" value="{{ edu.start|default:'' }}" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="education_end" value="{{ edu.end|default:'' }}" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Additional Details</label>
+                  <textarea name="education_details" rows="2">
+{{ edu.details|default:'' }}</textarea>
+                </div>
+              </div>
+
+              {% empty %}
+
+              <!-- DEFAULT EMPTY EDUCATION -->
+              <div class="education-item">
+                <div class="item-header">
+                  <span class="item-title">Education #1</span>
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Degree</label>
+                    <input type="text" name="education_degree" placeholder="Bachelor of Science" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Institution</label>
+                    <input type="text" name="education_institution" placeholder="University Name" />
+                  </div>
+                </div>
+
+                <div class="form-grid three">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <input type="text" name="education_location" placeholder="City, Country" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Start Date</label>
+                    <input type="month" name="education_start" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>End Date</label>
+                    <input type="month" name="education_end" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Additional Details</label>
+                  <textarea name="education_details" rows="2"></textarea>
+                </div>
+              </div>
+
+              {% endfor %}
+            </div>
+
+            <button type="button" onclick="addEducation()" class="btn btn-secondary">
+              <i class="fas fa-plus"></i> Add Education
+            </button>
+          </div>
+
+          <!-- SKILLS -->
+          <div class="section">
+            <h3><i class="fas fa-tools"></i> Skills</h3>
+
+            <div class="form-group">
+              <label>Skills (comma separated)</label>
+              <input
+                type="text"
+                name="skills"
+                placeholder="JavaScript, Python, SQL..."
+                value="{% if cv_data.skills %}{{ cv_data.skills|join:', ' }}{% endif %}"
+              />
+            </div>
+          </div>
+
+          <!-- PROJECTS -->
+          <div class="section">
+            <h3><i class="fas fa-project-diagram"></i> Projects</h3>
+
+            <div id="projects-fields">
+              {% for proj in cv_data.projects %}
+              <div class="project-item">
+                <div class="item-header">
+                  <span class="item-title">Project #{{ forloop.counter }}</span>
+                  {% if not forloop.first %}
+                  <button type="button" onclick="removeProject(this)" class="btn btn-danger btn-sm">
+                    <i class="fas fa-trash"></i> Remove
+                  </button>
+                  {% endif %}
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Project Name</label>
+                    <input
+                      type="text"
+                      name="project_name"
+                      placeholder="E-commerce Website"
+                      value="{{ proj.name|default:'' }}"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Link (optional)</label>
+                    <input
+                      type="url"
+                      name="project_link"
+                      placeholder="https://github.com/..."
+                      value="{{ proj.link|default:'' }}"
+                    />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Description (one per line)</label>
+                  <textarea name="project_description" rows="3">
+{{ proj.description|default:'' }}</textarea>
+                </div>
+              </div>
+
+              {% empty %}
+
+              <!-- DEFAULT EMPTY PROJECT -->
+              <div class="project-item">
+                <div class="item-header">
+                  <span class="item-title">Project #1</span>
+                </div>
+
+                <div class="form-grid two">
+                  <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" name="project_name" placeholder="E-commerce Website" />
+                  </div>
+
+                  <div class="form-group">
+                    <label>Link (optional)</label>
+                    <input type="url" name="project_link" placeholder="https://github.com/..." />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Description (one per line)</label>
+                  <textarea name="project_description" rows="3"></textarea>
+                </div>
+              </div>
+
+              {% endfor %}
+            </div>
+
+            <button type="button" onclick="addProject()" class="btn btn-secondary">
+              <i class="fas fa-plus"></i> Add Project
+            </button>
+          </div>
+
+          <!-- SAVE OPTIONS -->
+          <div class="section">
+            <h3><i class="fas fa-save"></i> Save Options</h3>
+
+            <div class="form-group">
+              <label>CV Name (for saving)</label>
+              <input
+                type="text"
+                name="cv_name"
+                placeholder="e.g., Software Engineer CV"
+                value="{% if editing %}{{ user_cv.name }}{% else %}My CV{% endif %}"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" name="save_to_db" value="1" {% if editing %}checked{% endif %} />
+                <span>Save to my CV library</span>
+              </label>
+              <small style="color: #6b7280; margin-top: 4px;">
+                Your CV will be saved and you can access it anytime from your dashboard.
+              </small>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <div class="section">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-file-download"></i> Generate CV
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/cv-builder.js"></script>
+  </body>
+</html>

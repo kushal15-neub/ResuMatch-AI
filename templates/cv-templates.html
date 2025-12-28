@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Templates - ResuMatch AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/cv-styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <script src="/static/navigation-fix.js"></script>
+  </head>
+  <body>
+    <div class="cv-container">
+      <div class="cv-header">
+        <div class="cv-header-content">
+          <a href="{% url 'home' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+
+          <div class="logo-section">
+            <div class="logo-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div>
+              <h1>Choose Your CV Template</h1>
+              <p>Select a professional template to build your CV</p>
+            </div>
+          </div>
+
+          <div class="user-nav">
+            {% if user.is_authenticated %}
+            <span class="user-welcome">Welcome, {{ user.first_name }}!</span>
+            <a href="{% url 'logout' %}" class="btn btn-secondary btn-sm">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-secondary btn-sm">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %}
+
+      <div class="cv-main">
+        {% if templates %}
+        <div class="templates-grid">
+          {% for template in templates %}
+          <div class="template-card">
+            <div class="template-header">
+              <h3>{{ template.name }}</h3>
+              <p>{{ template.description }}</p>
+            </div>
+
+            <a
+              href="{% url 'cv_builder' template.id %}"
+              class="btn btn-primary"
+            >
+              <i class="fas fa-rocket"></i> Use This Template
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-templates">
+          <i class="fas fa-file-alt"></i>
+          <h3>No Templates Available</h3>
+          <p>
+            CV templates will be available soon. For now, you can use our basic
+            template.
+          </p>
+          <a href="{% url 'cv_builder' 1 %}" class="btn btn-primary">
+            <i class="fas fa-rocket"></i> Use Basic Template
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>

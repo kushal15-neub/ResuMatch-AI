@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CV - {{ cv_data.personal_info.full_name }}</title>
+    <style>
+      @page {
+        size: A4;
+        margin: 15mm;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        color: #0f172a;
+        font-size: 11pt;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 30% 1fr;
+        gap: 12mm;
+      }
+      .sidebar {
+        background: #111827;
+        color: #f8fafc;
+        border-radius: 12px;
+        padding: 12mm 8mm;
+      }
+      .sidebar h3 {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 10pt;
+        margin: 12px 0 6px;
+      }
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 10pt;
+      }
+      .sidebar img {
+        width: 5cm;
+        height: 5cm;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 3px solid #facc15;
+      }
+      .main section {
+        margin-bottom: 14px;
+      }
+      .main h2 {
+        font-size: 13pt;
+        margin: 0 0 8px;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 4px;
+      }
+      .item {
+        border-bottom: 1px solid #e2e8f0;
+        padding: 6px 0;
+      }
+      .item:last-child {
+        border-bottom: none;
+      }
+      .item header {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+      }
+      .muted {
+        color: #64748b;
+        font-size: 10pt;
+      }
+      ul.bullets {
+        margin: 4px 0 0 12px;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid">
+      <aside class="sidebar">
+        {% if cv_data.profile_photo %}
+        <img src="{{ cv_data.profile_photo }}" alt="Profile photo" />
+        {% endif %}
+
+        <h1 style="font-size: 18pt; margin: 12px 0 4px">
+          {{ cv_data.personal_info.full_name }}
+        </h1>
+
+        {% if cv_data.personal_info.summary %}
+        <p style="font-size: 10pt; color: #e2e8f0">
+          {{ cv_data.personal_info.summary }}
+        </p>
+        {% endif %}
+
+        <h3>Contact</h3>
+        <ul>
+          <li>{{ cv_data.personal_info.email }}</li>
+          {% if cv_data.personal_info.phone %}
+          <li>{{ cv_data.personal_info.phone }}</li>
+          {% endif %}
+          {% if cv_data.personal_info.location %}
+          <li>{{ cv_data.personal_info.location }}</li>
+          {% endif %}
+        </ul>
+
+        {% if cv_data.skills %}
+        <h3>Skills</h3>
+        <ul>
+          {% for skill in cv_data.skills %}
+          <li>{{ skill }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </aside>
+
+      <main class="main">
+
+        {% if cv_data.experience %}
+        <section>
+          <h2>Experience</h2>
+          {% for exp in cv_data.experience %}
+          {% if exp.title or exp.company %}
+          <div class="item">
+            <header>
+              <div>
+                {{ exp.title }}
+                {% if exp.company %} — {{ exp.company }} {% endif %}
+              </div>
+              <div class="muted">
+                {% if exp.start %} {{ exp.start }} {% endif %}
+                {% if exp.end %} – {{ exp.end }} {% endif %}
+              </div>
+            </header>
+
+            {% if exp.location %}
+            <div class="muted">{{ exp.location }}</div>
+            {% endif %}
+
+            {% if exp.desc_lines %}
+            <ul class="bullets">
+              {% for bullet in exp.desc_lines %}
+                {% if bullet %}
+                <li>{{ bullet }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if cv_data.education %}
+        <section>
+          <h2>Education</h2>
+          {% for edu in cv_data.education %}
+          {% if edu.degree or edu.institution %}
+          <div class="item">
+            <header>
+              <div>
+                {{ edu.degree }}
+                {% if edu.institution %} - {{ edu.institution }} {% endif %}
+              </div>
+              <div class="muted">
+                {% if edu.start %} {{ edu.start }} {% endif %}
+                {% if edu.end %} – {{ edu.end }} {% endif %}
+              </div>
+            </header>
+
+            {% if edu.location %}
+            <div class="muted">{{ edu.location }}</div>
+            {% endif %}
+
+            {% if edu.details %}
+            <p>{{ edu.details }}</p>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if cv_data.projects %}
+        <section>
+          <h2>Projects</h2>
+          {% for proj in cv_data.projects %}
+          {% if proj.name %}
+          <div class="item">
+            <header>
+              <div>{{ proj.name }}</div>
+              {% if proj.link %}
+              <div class="muted">{{ proj.link }}</div>
+              {% endif %}
+            </header>
+
+            {% if proj.description %}
+            <p>{{ proj.description }}</p>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+        </section>
+        {% endif %}
+
+      </main>
+    </div>
+  </body>
+</html>

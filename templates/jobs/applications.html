@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Job Applications - ResuMatch AI</title>
+    <link rel="stylesheet" href="/static/css/cv-styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="cv-container">
+      <div class="cv-header">
+        <div class="cv-header-content">
+          <a href="{% url 'home' %}" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+          </a>
+
+          <div class="logo-section">
+            <div class="logo-icon">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <div>
+              <h1>My Job Applications</h1>
+              <p>Track all your job applications</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %} {% endif %}
+
+      <div class="cv-main">
+        {% if applications %}
+        <div class="applications-list">
+          {% for application in applications %}
+          <div class="application-card">
+            <div class="application-header">
+              <div>
+                <h3 style="margin: 0; color: var(--ink)">
+                  <a
+                    href="{% url 'job_detail' application.job.id %}"
+                    style="color: inherit; text-decoration: none"
+                  >
+                    {{ application.job.title }}
+                  </a>
+                </h3>
+                <p style="margin: 8px 0 0 0; color: var(--muted)">
+                  <strong>{{ application.job.company }}</strong>
+                  {% if application.job.location %} • {{
+                  application.job.location }}{% endif %}
+                </p>
+              </div>
+              <span class="status-badge status-{{ application.status }}">
+                {{ application.get_status_display }}
+              </span>
+            </div>
+
+            <div class="application-details">
+              <div class="detail-item">
+                <i class="fas fa-calendar"></i>
+                <span>Applied: {{ application.applied_at|date:"M d, Y" }}</span>
+              </div>
+              {% if application.cv %}
+              <div class="detail-item">
+                <i class="fas fa-file-alt"></i>
+                <span
+                  >CV: {{ application.cv.name }} (v{{ application.cv.version
+                  }})</span
+                >
+              </div>
+              {% endif %} {% if application.cover_letter %}
+              <div class="detail-item">
+                <i class="fas fa-envelope"></i>
+                <span>Cover letter included</span>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="application-actions">
+              <a
+                href="{% url 'job_detail' application.job.id %}"
+                class="btn btn-sm btn-secondary"
+              >
+                <i class="fas fa-eye"></i> View Job
+              </a>
+              {% if application.cover_letter %}
+              <button
+                onclick="showCoverLetter('{{ application.id }}')"
+                class="btn btn-sm btn-secondary"
+              >
+                <i class="fas fa-envelope-open"></i> View Cover Letter
+              </button>
+              {% endif %}
+            </div>
+
+            {% if application.cover_letter %}
+            <div
+              id="cover-letter-{{ application.id }}"
+              style="
+                display: none;
+                margin-top: 16px;
+                padding: 16px;
+                background: #1b2130;
+                border-radius: 8px;
+                border: 1px solid #283149;
+              "
+            >
+              <h4 style="margin-top: 0; color: var(--ink)">Cover Letter:</h4>
+              <p style="white-space: pre-line; color: var(--muted)">
+                {{ application.cover_letter }}
+              </p>
+            </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <i
+            class="fas fa-inbox"
+            style="font-size: 64px; color: #9ca3af; margin-bottom: 16px"
+          ></i>
+          <h3>No applications yet</h3>
+          <p>Start applying to jobs to track your applications here!</p>
+          <a href="{% url 'job_recommendations' %}" class="btn btn-primary">
+            <i class="fas fa-search"></i> Find Jobs
+          </a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <style>
+      .applications-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .application-card {
+        background: var(--card);
+        border: 1px solid var(--border-light);
+        border-radius: 12px;
+        padding: 20px;
+      }
+
+      .application-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border-light);
+      }
+
+      .status-badge {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .status-reviewed {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .status-interview {
+        background: #ddd6fe;
+        color: #5b21b6;
+      }
+
+      .status-accepted {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .application-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .application-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px dashed var(--border-light);
+      }
+
+      .empty-state h3 {
+        color: var(--ink);
+        margin: 16px 0 8px;
+      }
+
+      .empty-state p {
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+    </style>
+
+    <script>
+      function showCoverLetter(id) {
+        const element = document.getElementById("cover-letter-" + id);
+        if (element.style.display === "none") {
+          element.style.display = "block";
+        } else {
+          element.style.display = "none";
+        }
+      }
+    </script>
+  </body>
+</html>

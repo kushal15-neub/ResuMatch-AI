@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %} {% load static %} {% block title %}ResuMatch AI
+Admin | {% endblock %} {% block extrastyle %} {{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/custom.css' %}" />
+{% endblock %} {% block branding %}
+<div class="rm-admin-branding">
+  <span class="rm-admin-logo">ResuMatch</span>
+  <span class="rm-admin-badge">AI</span>
+  <span class="rm-admin-sub">Admin</span>
+</div>
+{% endblock %} {% block nav-global %}{% endblock %}
