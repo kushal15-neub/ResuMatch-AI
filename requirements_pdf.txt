@@ -1,2 +1,13 @@
 # Add these to your requirements.txt for PDF generation
 weasyprint==60.2
+Django==5.2.5
+
+# Environment variables
+python-dotenv==1.0.1
+
+# Google OAuth (social login)
+social-auth-app-django==5.4.2
+social-auth-core==4.5.4
+
+# Production safety (optional but recommended)
+gunicorn==22.0.0
